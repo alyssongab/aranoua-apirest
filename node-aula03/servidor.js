@@ -1,22 +1,7 @@
-import http from 'http';
+import app from './src/app.js';
 
-// ********* function expression
-const inicioServidor = function(req, res){
-    console.log('Chamada');
-    res.writeHead(200, {"Content-Type": "text/plain; charset=utf-8"});
-    console.log("URL:" + req.url);
-    console.log("ROTA:" + rotas[req.url]);
-    res.end("Requisição atendida: "+ rotas[req.url]);
-}
+const port = 3000;
 
-const server = http.createServer(inicioServidor);
-
-const rotas = {
-    ":/" : "Home",
-    "/cidades" : "Cidades",
-    "/pessoas" : "Pessoas"
-}
-
-server.listen(3000, () => {
+app.listen(port, () => {
     console.log("servidor iniciado");
 });

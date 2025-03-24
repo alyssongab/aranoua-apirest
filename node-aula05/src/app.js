@@ -12,7 +12,8 @@ app.get('/', (req, res) => {
     res.status(200).send("/home - express");
 });
 
-// rota cidades com get
+
+// endpoint cidades com get all
 app.get('/cidades', (req, res) => {
 
     const sql = "SELECT id,nome FROM cidades";
@@ -38,16 +39,32 @@ app.get('/cidades', (req, res) => {
 // endpoint cidades com get/id
 app.get('/cidades/:id', (req, res) => {
 
-    const sql = "SELECT id, nome FROM cidades WHERE id = " + req.params.id;
+    const sql = "SELECT id,nome FROM cidades WHERE id = " + req.params.id;
 
-    db.run(sql, function(err){
+    // para trabalhar com varias linhas
+    db.get(sql, (err, row) => {
         if(err){
-            console.error("Erro ao buscar cidade.", err.message);
-            return res.status(500).json({error: "Erro ao buscar cidade"});
+            console.error('Erro ao buscar cidade', err.message);
+            return res.status(500).json({error: 'Erro ao buscar cidade'});
         }
-        res.status(200).json({
-            id: ''
-        })
+
+        // Se nao houver cidade com o id especificado
+        if(!row){
+            console.error("Cidade não encontrada.");
+            return res.status(404).json({
+                error: "Cidade não encontrada"
+            });
+        }
+
+        // DTO - "Encapsula" os dados para transferencia
+        const jsonSaida = 
+        {
+            id: row.id,
+            nome: row.nome
+        }
+
+        res.status(200).json(jsonSaida);
+
     });
 });
 
@@ -79,11 +96,10 @@ app.post('/cidades', (req, res) => {
 
 });
 
-// rota cidades com put
+// endpoint cidades com put
 app.put('/cidades/:id', (req, res) => {
-    const cidade = findCidade(req.params.id);
-    cidade.cidade = req.body.cidade;
-    res.status(200).send(cidade);
+
+
 });
 
 // rota cidades com delete

@@ -6,21 +6,6 @@ const app = express();
 // middleware: express.json()
 app.use(express.json());
 
-// dados estaticos
-const cidades = [
-    {
-        "id": 1,
-        "cidade": "Eirunepé",
-    },
-    {
-        "id": 2,
-        "cidade": "Xique-Xique",
-    },
-    {
-        "id": 3,
-        "cidade": "Rolândia"
-    }
-];
 
 // rota home
 app.get('/', (req, res) => {
@@ -29,7 +14,18 @@ app.get('/', (req, res) => {
 
 // rota cidades com get
 app.get('/cidades', (req, res) => {
-    res.status(200).send(cidades);
+
+    const sql = "SELECT * FROM cidades";
+
+    // para trabalhar com varias linhas
+    db.all(sql, (err, rows) => {
+        if(err){
+            console.error('Erro ao listar cidades', err.message);
+            return res.status(500).json({error: 'Erro ao listar cidades'});
+        }
+        res.status(200).json(rows);
+    });
+
 });
 
 // rota cidades (com id)
@@ -62,9 +58,9 @@ app.post('/cidades', (req, res) => {
     db.run(sql, function(err) {
         if(err){
             console.error('Erro ao inserir cidade', err.message);
-            res.status(500).json({error: 'Erro ao inserir cidade'});
+            return res.status(500).json({error: 'Erro ao inserir cidade'});
         }
-        
+        // caso nao tenha erro
         res.status(201).json({
             id: this.lastID,
             nome 

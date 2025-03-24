@@ -99,28 +99,45 @@ app.post('/cidades', (req, res) => {
 // endpoint cidades com put
 app.put('/cidades/:id', (req, res) => {
 
+    console.log(req.body);
+    
+    const nome = req.body.nome;
 
-});
-
-// rota cidades com delete
-app.delete('/cidades/:id', (req, res) => {
-    const cidadeDeletada = deleteCidade(req.params.id);
-    res.status(200).send(cidadeDeletada);
-});
-
-// metodo para deletar cidade(s)
-function deleteCidade(id){
-    const indice = cidades.findIndex(elemento => elemento.id === Number(id));
-    if(indice !== -1){
-        const cidadesRemovidas = cidades.splice(indice, 1);
-        return cidadesRemovidas[0];
+    // valida
+    if(!nome){
+        return res.status(400).json({error: 'Nome da cidade é obrigatório'});
     }
-    return null;
-}
 
-// metodo para achar cidade por id
-function findCidade(id){
-    return cidades.find(elemento => elemento.id === Number(id)) || null;
-}
+    // sql
+    const sql = "UPDATE cidades SET nome = '"+nome+"' WHERE id = "+req.params.id;
+
+    db.run(sql, function(err) {
+        if(err){
+            console.error('Erro ao atualizar cidade', err.message);
+            return res.status(500).json({error: 'Erro ao atualizar cidade'});
+        }
+        // caso nao tenha erro
+        res.status(201).json({
+            id: req.params.id,
+            nome
+        });
+    });
+});
+
+// endpoint cidades com delete
+app.delete('/cidades/:id', (req, res) => {
+    const sql = "DELETE FROM cidades WHERE id = "+req.params.id;
+
+    db.run(sql, function(err) {
+        if(err){
+            console.error('Erro ao deletar cidade', err.message);
+            return res.status(500).json({error: 'Erro ao deletar cidade'});
+        }
+        // caso nao tenha erro
+        res.status(200).json({
+            id: req.params.id
+        });
+    });
+});
 
 export default app;

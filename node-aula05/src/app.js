@@ -1,4 +1,5 @@
 import express from 'express';
+import db from '../database.js';
 
 const app = express();
 
@@ -47,8 +48,29 @@ app.get('/cidades/:id', (req, res) => {
 // rota cidades com post
 app.post('/cidades', (req, res) => {
     console.log(req.body);
-    cidades.push(req.body);
-    res.status(201).send(req.body);
+    
+    const nome = req.body.nome;
+
+    // valida
+    if(!nome){
+        return res.status(400).json({error: 'Nome da cidade é obrigatório'});
+    }
+
+    // sql
+    const sql = "INSERT INTO cidades (nome) VALUES('"+nome+"');";
+
+    db.run(sql, function(err) {
+        if(err){
+            console.error('Erro ao inserir cidade', err.message);
+            res.status(500).json({error: 'Erro ao inserir cidade'});
+        }
+        
+        res.status(201).json({
+            id: this.lastID,
+            nome 
+        });
+    });
+
 });
 
 // rota cidades com put

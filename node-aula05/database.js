@@ -16,7 +16,7 @@ const db = new sqlite3.Database('./database.sqlite', (err) => {
 db.serialize(() => {
     db.run('CREATE TABLE IF NOT EXISTS cidades' +
         ' (id INTEGER PRIMARY KEY AUTOINCREMENT,' + 
-        ' cidade TEXT NOT NULL)',
+        ' nome TEXT NOT NULL)',
     (err) => {
         if(err){
             console.error('Erro ao criar a tabela cidades', err.message);

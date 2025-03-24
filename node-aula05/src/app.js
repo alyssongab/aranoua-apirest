@@ -15,7 +15,7 @@ app.get('/', (req, res) => {
 // rota cidades com get
 app.get('/cidades', (req, res) => {
 
-    const sql = "SELECT * FROM cidades";
+    const sql = "SELECT id,nome FROM cidades";
 
     // para trabalhar com varias linhas
     db.all(sql, (err, rows) => {
@@ -23,25 +23,35 @@ app.get('/cidades', (req, res) => {
             console.error('Erro ao listar cidades', err.message);
             return res.status(500).json({error: 'Erro ao listar cidades'});
         }
-        res.status(200).json(rows);
+
+        // DTO - "Encapsula" os dados para transferencia
+        const jsonSaida = rows.map(elemento => ({
+            id: elemento.id,
+            nome: elemento.nome
+        }));
+
+        res.status(200).json(jsonSaida);
     });
 
 });
 
-// rota cidades (com id)
+// endpoint cidades com get/id
 app.get('/cidades/:id', (req, res) => {
 
-    const cidade = findCidade(req.params.id);
+    const sql = "SELECT id, nome FROM cidades WHERE id = " + req.params.id;
 
-    if(cidade){
-        res.status(200).send(cidade)
-    }
-    else{
-        res.status(404).send({"error": "Não existe cidade com esse ID!"});
-    }
+    db.run(sql, function(err){
+        if(err){
+            console.error("Erro ao buscar cidade.", err.message);
+            return res.status(500).json({error: "Erro ao buscar cidade"});
+        }
+        res.status(200).json({
+            id: ''
+        })
+    });
 });
 
-// rota cidades com post
+// endpoint cidades usando post
 app.post('/cidades', (req, res) => {
     console.log(req.body);
     

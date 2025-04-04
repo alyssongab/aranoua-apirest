@@ -21,3 +21,16 @@ export const criarPessoa = async(req, res) => {
         res.status(400).json({error: "Erro ao criar pessoa.", detalhes: error});
     }
 };
+
+// lista pessoa por id
+export const listaPessoaId = async(req, res) => {
+    try{
+        const pessoa = await Pessoa.findByPk(req.params.id);
+        res.status(200).json(pessoa);
+    }
+    catch(error){
+        res.status(404).json({error: "Pessoa não encontrada."});
+    }
+}
+
+// atualiza pessoa

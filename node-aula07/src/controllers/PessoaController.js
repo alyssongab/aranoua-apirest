@@ -1,4 +1,4 @@
-import Pessoa from "../model/Pessoa";
+import Pessoa from "../model/Pessoa.js";
 
 export const listarPessoas = async(req, res) => {
     try{

@@ -2,7 +2,8 @@ import express from "express";
 import {
     listarPessoas,
     criarPessoa,
-    listaPessoaId
+    listaPessoaId,
+    atualizaPessoa
 } from "../controllers/PessoaController.js";
 
 const router = express.Router();
@@ -11,6 +12,7 @@ const router = express.Router();
 router.get('/', listarPessoas); // lista todas as pessoas
 router.post('/', criarPessoa); // cria pessoa
 router.get('/:id', listaPessoaId); // lista pessoa por Id
+router.put('/:id', atualizaPessoa); // atualiza pessoa por Id
 
 // localhost:3000/pessoas
 

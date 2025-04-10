@@ -34,3 +34,13 @@ export const listaPessoaId = async(req, res) => {
 }
 
 // atualiza pessoa
+export const atualizaPessoa = async(req, res) => {
+    try{
+        const pessoa = await Pessoa.findByPk(req.params.id);
+        pessoa.update(req.params.body);
+        res.status(201).json(pessoa);
+    }
+    catch(error){
+        res.status(404).json({error: "Pessoa não encontrada."});
+    }
+}

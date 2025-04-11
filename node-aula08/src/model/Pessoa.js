@@ -7,7 +7,7 @@ class Pessoa extends Model {
             {
                 nome: {
                     type: DataTypes.STRING,
-                    allowNull: false // campo obrigatorio
+                    allowNull: false
                 },
                 
                 telefone: {
@@ -19,6 +19,14 @@ class Pessoa extends Model {
                     allowNull: false,
                     validate: {
                         isEmail: true
+                    }
+                },
+                cidade_id: {
+                    type: DataTypes.STRING,
+                    allowNull: false,
+                    references: {
+                        model: Cidade,
+                        key: 'id'
                     }
                 }
             },

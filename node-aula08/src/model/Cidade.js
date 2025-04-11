@@ -1,4 +1,5 @@
 import { DataTypes, Model } from "sequelize";
+import Estado from "./Estado.js";
 
 class Cidade extends Model {
     static initModel(sequelize) {
@@ -13,10 +14,13 @@ class Cidade extends Model {
                     allowNull: false,
                     unique: true
                 },
-                estado: {
+                estado_id: {
                     type: DataTypes.STRING,
                     allowNull: false,
-                    unique: true
+                    references: {
+                        model: Estado,
+                        key: 'id'
+                    }
                 }
             },
             {
@@ -26,6 +30,11 @@ class Cidade extends Model {
                 timestamps: true
             }
         );
+
+        Cidade.belongsTo(Estado, {
+            foreignKey: 'estado_id',
+            as: 'estado'
+        });
     }
 }
 

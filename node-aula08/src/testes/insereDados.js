@@ -1,8 +1,8 @@
 // src/testes/TestaInserirRegistros.js
-import sequelize from './src/config/database.js';
-import Estado from './src/models/Estado.js';
-import Cidade from './src/models/Cidade.js';
-import Pessoa from './src/models/Pessoa.js';
+import sequelize from '../config/database.js';
+import Estado from '../model/Estado.js';
+import Cidade from '../model/Cidade.js';
+import Pessoa from '../model/Pessoa.js';
 
 (async () => {
   try {

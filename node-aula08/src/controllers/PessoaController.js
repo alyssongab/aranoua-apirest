@@ -1,15 +1,34 @@
 import Pessoa from "../model/Pessoa.js";
 import Cidade from "../model/Cidade.js";
+import Estado from "../model/Estado.js";
 
 // listar pessoas
 export const listarPessoas = async(req, res) => {
     try{
         const pessoas = await Pessoa.findAll({
-            include: { model: Cidade, as: 'cidade' } // inclui a cidade associada
+            include: { 
+                model: Cidade, 
+                as: 'cidade',
+                include: { 
+                    model: Estado, 
+                    as: 'estado'
+                }
+            }
         });
-        res.status(200).json(pessoas);
+
+        // Personalizar a resposta para incluir apenas os nomes de cidade e estado
+        const response = pessoas.map((pessoa) => ({
+            id: pessoa.id,
+            nome: pessoa.nome,
+            telefone: pessoa.telefone,
+            email: pessoa.email,
+            cidade: pessoa.cidade.nome,
+            estado: pessoa.cidade.estado.nome
+        }));
+        res.status(200).json(response);
     }
     catch(error){
+        console.error(error)
         res.status(500).json({ error: "Erro ao listar pessoas" });
     }
 };

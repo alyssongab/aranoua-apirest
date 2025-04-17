@@ -1,8 +1,8 @@
 // src/testes/TestaInserirRegistros.js
-import sequelize from '../config/database.js';
-import Estado from '../model/Estado.js';
-import Cidade from '../model/Cidade.js';
-import Pessoa from '../model/Pessoa.js';
+import sequelize from './src/config/database.js';
+import Estado from './src/model/Estado.js';
+import Cidade from './src/model/Cidade.js';
+import Pessoa from './src/model/Pessoa.js';
 
 (async () => {
   try {
@@ -31,3 +31,5 @@ import Pessoa from '../model/Pessoa.js';
     console.error('Erro ao inserir registros:', error.message);
   }
 })();
+
+
